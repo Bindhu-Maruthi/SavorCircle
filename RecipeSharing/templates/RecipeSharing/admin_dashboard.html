@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Admin Dashboard</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f0f4ff, #dfeaff);
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        font-size: 32px;
+    }
+    .counts {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    .count-box {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: #fff;
+        padding: 25px 40px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        width: 200px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .count-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    .count-box strong {
+        font-size: 26px;
+        display: block;
+        margin-top: 8px;
+    }
+    h2 {
+        margin-top: 60px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #34495e;
+        border-left: 5px solid #3498db;
+        padding-left: 15px;
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    .data-table th,
+    .data-table td {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+    .data-table th {
+        background: #3498db;
+        color: #fff;
+    }
+    .data-table tr:nth-child(even) {
+        background-color: #f9fcff;
+    }
+    .data-table tr:hover {
+        background-color: #eef6ff;
+    }
+    .delete-link {
+        color: #e74c3c;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 6px 10px;
+        border: 1px solid #e74c3c;
+        border-radius: 4px;
+        background: rgba(231, 76, 60, 0.1);
+        transition: background 0.2s, color 0.2s;
+    }
+    .delete-link:hover {
+        background: #e74c3c;
+        color: #fff;
+    }
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+    @media (max-width: 768px) {
+        .counts {
+            flex-direction: column;
+            align-items: center;
+        }
+        .count-box {
+            width: 80%;
+        }
+        .data-table th, .data-table td {
+            font-size: 13px;
+            padding: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="counts">
+        <div class="count-box">Total Users<strong>{{ user_count }}</strong></div>
+        <div class="count-box">Total Recipes<strong>{{ post_count }}</strong></div>
+        <div class="count-box">Total Comments<strong>{{ comment_count }}</strong></div>
+        <div class="count-box">Total Likes<strong>{{ like_count }}</strong></div>
+        <div class="count-box">Saved Recipes<strong>{{ saved_count }}</strong></div>
+    </div>
+
+    <h2>All Recipes</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.author.username }}</td>
+                <td>{{ post.created_at|date:"Y-m-d H:i" }}</td>
+                <td><a class="delete-link" href="{% url 'delete_post' post.id %}">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No recipes found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>All Comments</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Recipe</th>
+                <th>Author</th>
+                <th>Content</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>{{ comment.recipe.title }}</td>
+                <td>{{ comment.author.username }}</td>
+                <td>{{ comment.content|truncatewords:12 }}</td>
+                <td>{{ comment.created_at|date:"Y-m-d H:i" }}</td>
+                <td><a class="delete-link" href="{% url 'delete_comment' comment.id %}">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">No comments found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{% block title %}Shopping List{% endblock %}
+
+{% block content %}
+<style>
+    .shopping-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.08);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(12px);
+        color:rgb(171, 18, 130);
+        position: relative;
+    }
+
+    h2 {
+        text-align: center;
+        font-family: 'Great Vibes', cursive;
+        font-size: 36px;
+        margin-bottom: 20px;
+        color:rgb(82, 10, 198);
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+
+    li {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color:rgb(230, 137, 16);
+    }
+
+    .empty-msg {
+        text-align: center;
+        font-style: italic;
+        color: #ffdcdc;
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .back-link a {
+        color: #44d6a2;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .back-link a:hover {
+        text-decoration: underline;
+    }
+
+    .top-back-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 8px 16px;
+        background-color: #44d6a2;
+        color: white;
+        border-radius: 6px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .top-back-btn:hover {
+        background-color: #33b98c;
+    }
+</style>
+
+<div class="shopping-container">
+    <a href="{% url 'home' %}" class="top-back-btn">⬅ Back to Home</a>
+
+    <h2>Shopping List</h2>
+
+    {% if ingredients %}
+        <ul>
+            {% for item in ingredients %}
+                <li>🟢 {{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-msg">No ingredients to show. Start planning your meals!</p>
+    {% endif %}
+
+    <div class="back-link">
+        <a href="{% url 'meal_plan' %}">← Back to Meal Planner</a>
+    </div>
+</div>
+{% endblock %}

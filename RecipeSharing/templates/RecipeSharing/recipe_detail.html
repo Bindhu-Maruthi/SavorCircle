@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ recipe.title }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b, #ffcc99);
+            background-size: 400%;
+            animation: gradientFlow 15s ease infinite;
+            min-height: 100vh;
+            padding: 40px;
+            color: #333;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .section strong {
+            color: #ff6f61;
+        }
+
+        .footer {
+            font-style: italic;
+            font-size: 14px;
+            color: #555;
+            margin-top: 25px;
+        }
+
+        h3 {
+            margin-top: 30px;
+            font-size: 22px;
+            color: #333;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            resize: vertical;
+            font-size: 14px;
+        }
+
+        textarea::placeholder {
+            color: #555;
+        }
+
+        button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff8a75;
+        }
+
+        a.back-home {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #ff6f61;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a.back-home:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ recipe.title }}</h1>
+
+        {% if recipe.image %}
+            <img src="{{ recipe.image.url }}" alt="Recipe Image">
+        {% endif %}
+
+        <div class="section"><strong>Cook time:</strong> {{ recipe.cook_time }} minutes</div>
+        <div class="section"><strong>Ingredients:</strong> {{ recipe.ingredients }}</div>
+        <div class="section"><strong>Instructions:</strong> {{ recipe.instructions }}</div>
+
+        <div class="footer">
+            Posted by: <strong>{{ recipe.author.username }}</strong> on {{ recipe.created_at }}
+        </div>
+
+        <h3>Comments</h3>
+        <div>
+            {% for comment in recipe.comments.all %}
+                <p><strong>{{ comment.author.username }}</strong>: {{ comment.content }}</p>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+        </div>
+
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_comment' recipe.id %}">
+                {% csrf_token %}
+                <textarea name="content" placeholder="Add a comment..." required></textarea>
+                <button type="submit">Post</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}" style="color:#ff6f61;">Login</a> to comment.</p>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="back-home">⬅ Back to Home</a>
+    </div>
+</body>
+</html>

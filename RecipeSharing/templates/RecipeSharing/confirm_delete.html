@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Delete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fce4ec;
+            padding: 40px;
+        }
+        .box {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #c2185b;
+        }
+        p {
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .confirm {
+            background-color: #d32f2f;
+            color: white;
+        }
+        .cancel {
+            background-color: #9e9e9e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Are you sure?</h2>
+        <p>Do you really want to delete <strong>{{ recipe.title }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button class="confirm" type="submit">Yes, delete</button>
+            <a href="{% url 'dashboard' %}">
+                <button class="cancel" type="button">Cancel</button>
+            </a>
+        </form>
+    </div>
+</body>
+</html>

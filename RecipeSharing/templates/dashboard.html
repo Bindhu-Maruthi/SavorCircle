@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard | SavorCircle</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b, #ffcc99);
+            background-size: 400%;
+            animation: gradientFlow 15s ease infinite;
+            padding: 30px;
+            color: #333;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2 {
+            font-family: 'Great Vibes', cursive;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            text-decoration: none;
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #ff8a75;
+        }
+
+        .btn.logout {
+            background-color: #e63946;
+        }
+
+        .btn.logout:hover {
+            background-color: #f55e5b;
+        }
+
+        .card-container, .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            transition: transform 0.2s;
+            backdrop-filter: blur(8px);
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            padding: 15px;
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .actions a {
+            font-size: 14px;
+            background-color: #ff9f43;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .actions a:hover {
+            background-color: #ffb07b;
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        hr {
+            border-color: rgba(0,0,0,0.2);
+            margin: 50px auto;
+            width: 60%;
+        }
+
+        h3 {
+            color: #333;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div>
+            <a href="{% url 'add_recipe' %}" class="btn">➕ Post Recipe</a>
+            <a href="{% url 'home' %}" class="btn">🏠 Home</a>
+        </div>
+        <div>
+            <h3>Welcome, {{ user.username }}</h3>
+        </div>
+        <div>
+            <a href="{% url 'logout' %}" class="btn logout">🚪 Logout</a>
+        </div>
+    </div>
+
+    <!-- Posted Recipes -->
+    <h1>📋 Your Posted Recipes</h1>
+
+    {% if recipes %}
+        <div class="card-container">
+            {% for recipe in recipes %}
+            <div class="card">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" alt="Recipe Image">
+                {% endif %}
+                <div class="card-title">{{ recipe.title }}</div>
+                <div class="actions">
+                    <a href="{% url 'edit_recipe' recipe.id %}">✏️ Edit</a>
+                    <a href="{% url 'delete_recipe' recipe.id %}">🗑️ Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven’t posted any recipes yet.</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- Saved Recipes -->
+    <h2>🔖 Saved Recipes</h2>
+
+    {% if saved_recipes %}
+        <div class="card-grid">
+            {% for recipe in saved_recipes %}
+                <div class="card">
+                    <a href="{% url 'recipe_detail' recipe.id %}">
+                        {% if recipe.image %}
+                            <img src="{{ recipe.image.url }}" alt="Recipe Image">
+                        {% endif %}
+                        <div class="card-title">{{ recipe.title }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven’t saved any recipes yet.</p>
+    {% endif %}
+</body>
+</html>

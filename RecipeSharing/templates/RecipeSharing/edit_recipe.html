@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Recipe</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff8e1;
+            padding: 40px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #4e342e;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background-color: #ff9800;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #fb8c00;
+        }
+        a {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #6d4c41;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Edit Your Recipe</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Update Recipe</button>
+        </form>
+        <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

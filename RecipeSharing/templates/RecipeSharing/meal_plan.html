@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meal Planner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #a5d6a7);
+            margin: 0;
+            padding: 0;
+            color: #2e7d32;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1b5e20;
+        }
+
+        .day-card {
+            border: 1px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f1f8e9;
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #388e3c;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #81c784;
+            background: #fff;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 30px auto 0;
+            background: #2e7d32;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1b5e20;
+        }
+
+        .top-back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #a5d6a7;
+            color: #1b5e20;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .top-back-btn:hover {
+            background-color: #81c784;
+        }
+
+        @media (min-width: 768px) {
+            .day-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .day-card {
+                flex: 1 1 45%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'home' %}" class="top-back-btn">⬅ Back to Home</a>
+        <h2>🥗 Plan Your Weekly Meals</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="day-grid">
+                {% for day in days %}
+                <div class="day-card">
+                    <div class="day-title">{{ day|title }}</div>
+                    {% for meal in meal_types %}
+                        <label>{{ meal|title }}</label>
+                        <select name="{{ day }}_{{ meal }}">
+                            <option value="">-- Select Recipe --</option>
+                            {% for recipe in recipes %}
+                                <option value="{{ recipe.id }}">{{ recipe.title }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="submit-btn">Save Meal Plan</button>
+        </form>
+    </div>
+</body>
+</html>

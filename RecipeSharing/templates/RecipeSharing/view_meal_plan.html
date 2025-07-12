@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Weekly Meal Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #f9fbe7, #dcedc8);
+            margin: 0;
+            padding: 0;
+            color: #33691e;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2e7d32;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            border: 1px solid #c5e1a5;
+            text-align: center;
+        }
+
+        th {
+            background-color: #aed581;
+            color: #1b5e20;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f1f8e9;
+        }
+
+        a {
+            text-decoration: none;
+            color: #33691e;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #558b2f;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #607d8b;
+            margin-top: 40px;
+        }
+
+        .empty-msg a {
+            color: #33691e;
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #aed581;
+            color: #1b5e20;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background-color: #9ccc65;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'home' %}" class="back-btn">⬅ Back to Home</a>
+
+        <h2>🍴 Your Weekly Meal Plan</h2>
+        {% if meal_plans %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Meal Type</th>
+                    <th>Recipe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in meal_plans %}
+                <tr>
+                    <td>{{ plan.day|title }}</td>
+                    <td>{{ plan.meal_type|title }}</td>
+                    <td>
+                        <a href="{% url 'recipe_detail' plan.recipe.id %}">
+                            {{ plan.recipe.title }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-msg">You have not planned any meals yet. <a href="{% url 'meal_plan' %}">Start Planning</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>
