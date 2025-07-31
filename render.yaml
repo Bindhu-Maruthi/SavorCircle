@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: savorcircle
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn RecipeSharing.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: RecipeSharing.settings
